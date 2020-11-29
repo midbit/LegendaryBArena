@@ -18,3 +18,11 @@ type CommandDoesNotExist struct {
 func (e CommandDoesNotExist) Error() string {
 	return fmt.Sprintf("Command %s does not exist", e.Command)
 }
+
+type CardDoesNotExistError struct {
+	Card string
+}
+
+func (e CardDoesNotExistError) Error() string {
+	return fmt.Sprintf("Card %s does not exist", e.Card)
+}
