@@ -2,6 +2,7 @@ package service
 
 import (
 	interface_repository "LegendaryBArena/src/interface/repository"
+	"LegendaryBArena/src/models"
 
 	"github.com/bwmarrin/discordgo"
 )
@@ -16,4 +17,12 @@ func (service UserService) AddUser(user *discordgo.User) error {
 		return err
 	}
 	return nil
+}
+
+func (service UserService) FindUser(user *discordgo.User) (*models.User, error) {
+	userModel, err := service.UserRepository.FindUserByName(user.Username)
+	if err != nil {
+		return nil, err
+	}
+	return userModel, nil
 }

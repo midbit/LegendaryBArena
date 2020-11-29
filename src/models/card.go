@@ -8,6 +8,7 @@ type Card struct {
 	Description string
 	Photo       string
 	Rarity      string
+	Class       string
 	Booster     []*Booster `gorm:"many2many:booster_card;"`
 	User        []*User    `gorm:"many2many:user_card;"`
 	Id          uint       `gorm:"primaryKey"`
