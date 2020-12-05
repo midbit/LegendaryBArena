@@ -39,6 +39,18 @@ func (b Bot) handleMessageResult(session *discordgo.Session, message *discordgo.
 		channel.PrivateSpecificMessage(session, message.Author, messageSend)
 		break
 	case "summon":
+		name := strings.Join(command.Arguments[:], " ")
+		user, err := b.UserService.FindUser(message.Author)
+		if err != nil {
+			channel.PrivateTextMessage(session, message.Author, err.Error())
+		}
+		card := user.FindCards(name)
+		if card != nil {
+			messageSend = template.CreateSummonTemplate(card, user)
+			channel.SpecificMessage(session, message.ChannelID, messageSend)
+			break
+		}
+		channel.PrivateTextMessage(session, message.Author, "You do not own that card")
 		break
 	case "open":
 		name := strings.Join(command.Arguments[:], " ")
