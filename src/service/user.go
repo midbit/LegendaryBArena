@@ -26,3 +26,17 @@ func (service UserService) FindUser(user *discordgo.User) (*models.User, error) 
 	}
 	return targetUser, nil
 }
+
+func (service UserService) AddCard(user *discordgo.User, card *models.Card) error {
+	err := service.UserRepository.AddCardToUser(user.Username, card.Id)
+	return err
+}
+
+func (service UserService) AddCards(user *discordgo.User, cards []models.Card) error {
+	var ids []uint
+	for _, card := range cards {
+		ids = append(ids, card.Id)
+	}
+	err := service.UserRepository.AddCardsToUser(user.ID, ids)
+	return err
+}

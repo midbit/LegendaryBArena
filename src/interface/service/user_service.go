@@ -9,4 +9,6 @@ import (
 type UserServiceInterface interface {
 	AddUser(*discordgo.User) error
 	FindUser(*discordgo.User) (*models.User, error)
+	AddCard(*discordgo.User, *models.Card) error
+	AddCards(user *discordgo.User, cards []models.Card) error
 }

@@ -12,7 +12,7 @@ type BoosterRepository struct {
 
 func (repository BoosterRepository) FindBoosterByName(name string) (*models.Booster, error) {
 	var booster models.Booster
-	result := repository.Connection.Where("name = ?", name).First(&booster)
+	result := repository.Connection.Preload("Cards").Where("name = ?", name).First(&booster)
 	if result.Error != nil {
 		return &booster, result.Error
 	}

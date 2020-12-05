@@ -5,6 +5,8 @@ import (
 	interface_service "LegendaryBArena/src/interface/service"
 	"LegendaryBArena/src/template"
 	"LegendaryBArena/src/utility"
+	"log"
+	"strings"
 
 	"github.com/bwmarrin/discordgo"
 )
@@ -39,7 +41,22 @@ func (b Bot) handleMessageResult(session *discordgo.Session, message *discordgo.
 	case "summon":
 		break
 	case "open":
-		break
+		name := strings.Join(command.Arguments[:], " ")
+		booster, err := b.BoosterService.FindBoosterByName(name)
+		if err != nil {
+			channel.PrivateTextMessage(session, message.Author, err.Error())
+			break
+		}
+		log.Print(booster.Cards)
+		cards := booster.GenerateCard(5)
+		err = b.UserService.AddCards(message.Author, cards)
+		if err != nil {
+			channel.PrivateTextMessage(session, message.Author, err.Error())
+			break
+		}
+		messageSend = template.CreateOpenTemplate(cards, *booster)
+		channel.PrivateSpecificMessage(session, message.Author, messageSend)
+
 	case "boosters":
 		boosters, err := b.BoosterService.FindAllBoosters(0)
 		if err != nil {
